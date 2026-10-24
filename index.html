@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paleta de colores</title>
+
+    <link rel="stylesheet" href="reset.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Paleta de colores</h1>
+    </main>
+    <!-- CONTROLES -->
+    <div class="controles" style="border: 1px solid black; padding: 10px; margin: 10px">
+      <label for="select-cantidad">Cantidad de colores:</label>
+      <select id="select-cantidad">
+        <option value="6">6 colores</option>
+        <option value="8">8 colores</option>
+        <option value="9">9 colores</option>
+      </select>
+
+      <label for="select-formato">Formato de codigo:</label>
+      <select id="select-formato">
+        <option value="hex">HEX</option>
+        <option value="hsl">HSL</option>
+      </select>
+
+      <button id="btn-generar">GENERAR PALETA</button>
+    </div> 
+
+    <!-- PALETAS DE COLORES-->
+    <div style="border: 1px solid black; padding: 10px; margin: 10px"></div>
+
+    <div style="border: 1px solid black; padding: 5px; margin: 5px"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
