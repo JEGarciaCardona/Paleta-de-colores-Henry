@@ -50,3 +50,78 @@ a {
     scroll-behavior: auto !important;
   }
 }
+.paleta-contenedor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+/* --- Tarjeta de Color individual --- */
+.tarjeta-color {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e2e8f0;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(3, 100, 156, 0.15);
+    border-color: #cbd5e1;
+  }
+}
+
+.muestra-color {
+  height: 130px;
+  width: 100%;
+}
+
+.info-color {
+  padding: 0.85rem;
+  text-align: center;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #334155;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  /* Icono sutil de copiar */
+  &::after {
+    content: "📋";
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+}
+
+/* --- Microfeedback (Toast flotante) --- */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: #0f172a;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+
+  &.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
