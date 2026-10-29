@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("main").appendChild(paletaContenedor);
   }
 
-
   const toast = document.createElement("div");
   toast.className = "toast";
   document.body.appendChild(toast);
@@ -19,49 +18,52 @@ document.addEventListener("DOMContentLoaded", () => {
   function mostrarToast(mensaje) {
     toast.textContent = mensaje;
     toast.classList.add("visible");
-    setTimeout(() => {
-      toast.classList.remove("visible");
-    }, 2000);
+    setTimeout(() => toast.classList.remove("visible"), 2000);
   }
 
- const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+  let paletaActual = [];
 
-  function generarColor(formato) {
-    if (formato === "hsl") {
+  function generarPaleta() {
+    const cantidad = parseInt(selectCantidad.value, 10);
+    paletaActual = [];
+
+    for (let i = 0; i < cantidad; i++) {
       const h = random(0, 360);
       const s = random(45, 90);
       const l = random(40, 70);
-      return `hsl(${h}, ${s}%, ${l}%)`;
-    }
 
-    const hex = Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0");
-    return `#${hex.toUpperCase()}`;
+      const hsl = `hsl(${h}, ${s}%, ${l}%)`;
+      const hex = hslParaHex(h, s, l);
+
+      paletaActual.push({ hex, hsl });
+    }
+    renderizar();
   }
 
-  function crearPaleta() {
-    const cantidad = parseInt(selectCantidad.value, 10);
+  function renderizar() {
     const formato = selectFormato.value;
-
     paletaContenedor.innerHTML = "";
 
-    for (let i = 0; i < cantidad; i++) {
-      const color = generarColor(formato);
+    paletaActual.forEach(color => {
+
+      const textoMostrado = formato === "hsl" ? color.hsl : color.hex;
 
       const tarjeta = document.createElement("div");
       tarjeta.className = "tarjeta-color";
       tarjeta.setAttribute("tabindex", "0");
       tarjeta.setAttribute("role", "button");
-      tarjeta.setAttribute("aria-label", `Copiar color ${color}`);
+      tarjeta.setAttribute("aria-label", `Copiar color ${textoMostrado}`);
 
       tarjeta.innerHTML = `
-        <div class="muestra-color" style="background-color: ${color};"></div>
-        <div class="info-color">${color}</div>
+        <div class="muestra-color" style="background-color: ${color.hex};"></div>
+        <div class="info-color">${textoMostrado}</div>
       `;
 
       tarjeta.addEventListener("click", () => {
-        navigator.clipboard.writeText(color).then(() => {
-          mostrarToast(`¡Copiado al portapapeles: ${color}!`);
+        navigator.clipboard.writeText(textoMostrado).then(() => {
+          mostrarToast(`¡Copiado: ${textoMostrado}!`);
         });
       });
 
@@ -73,14 +75,23 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       paletaContenedor.appendChild(tarjeta);
-    }
+    });
   }
 
+  function hslParaHex(h, s, l) {
+    l /= 100;
+    const a = s * Math.min(l, 1 - l) / 100;
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+  }
 
-  btnGenerar.addEventListener("click", crearPaleta);
-  selectCantidad.addEventListener("change", crearPaleta);
-  selectFormato.addEventListener("change", crearPaleta);
+  btnGenerar.addEventListener("click", generarPaleta);
+  selectCantidad.addEventListener("change", generarPaleta); 
+  selectFormato.addEventListener("change", renderizar);      
 
-
-  crearPaleta();
+  generarPaleta();
 });
